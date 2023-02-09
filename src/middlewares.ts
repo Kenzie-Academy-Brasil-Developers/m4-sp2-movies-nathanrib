@@ -18,7 +18,7 @@ const ensuranceMovieExists = async (
   };
   const queryResult: MovieResult = await client.query(queryConfig);
   if (!queryResult.rowCount) {
-    res.status(404).json({
+    return res.status(404).json({
       message: "id not found",
     });
   }

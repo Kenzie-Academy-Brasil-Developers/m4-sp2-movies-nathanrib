@@ -24,7 +24,7 @@ const createMovie = async (req: Request, res: Response): Promise<Response> => {
     return res.status(201).json(newWorkOrder);
   } catch (error) {
     if (error instanceof Error) {
-      return res.status(400).json({
+      return res.status(409).json({
         message: error.message,
       });
     }
@@ -71,6 +71,8 @@ const deleteMovie = async (req: Request, res: Response): Promise<Response> => {
   return res.status(204).send();
 };
 const updateMovie = async (req: Request, res: Response): Promise<Response> => {
+
+  try{ 
   const id: number = parseInt(req.params.id);
   const movieReqValues = Object.values(req.body);
   const movieReqKeys = Object.keys(req.body);
@@ -90,6 +92,18 @@ const updateMovie = async (req: Request, res: Response): Promise<Response> => {
 
   const queryResult: MovieResult = await client.query(queryConfig);
   return res.status(200).json(queryResult.rows[0]);
+} 
+catch (error) {
+  if (error instanceof Error) {
+    return res.status(409).json({
+      message: error.message,
+    });
+  }
+  return res.status(500).json({
+    message: "internal server error",
+  });
+}
+
 };
 
 export { createMovie, readAllMovies, deleteMovie, updateMovie };
